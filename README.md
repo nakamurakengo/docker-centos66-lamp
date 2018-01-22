@@ -4,6 +4,8 @@
 - apache
 - mysql
 - pecl/imagick-3.0.1
+- sendmail
+- xinetd
 
 # apache
 - override allowed

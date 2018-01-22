@@ -11,8 +11,11 @@ RUN yum -y install \
     php-gd \
     php-pear \
     ImageMagick \
-    ImageMagick-devel
+    ImageMagick-devel \
+    sendmail \
+    xinetd
 
+RUN /bin/rm -f /etc/xinetd.d/*
 RUN printf "\n" | pecl install imagick-3.0.1
 RUN mkdir /base
 RUN mkdir /base/application
@@ -22,6 +25,7 @@ COPY ./assets/php.conf   /etc/httpd/conf.d/
 COPY ./assets/php.ini    /etc/
 COPY ./assets/index.php  /base/public_html/
 COPY ./assets/phpMyAdmin /base/phpmyadmin/
+COPY ./assets/smtp       /etc/xinetd.d/smtp
 EXPOSE 80
 
-CMD /usr/sbin/httpd -DFOREGROUND
+CMD bash -c "/usr/sbin/xinetd -dontfork && /usr/sbin/httpd -DFOREGROUND"
